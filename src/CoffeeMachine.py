@@ -8,12 +8,14 @@ class CoffeeMachine:
         self.money_earned = 0    # total money earned
 
     def check_inventory(self):
-        print(f"Water: {self.water_level}ml")
-        print(f"Milk: {self.milk_level}ml")
-        print(f"Coffee Beans: {self.coffee_beans}g")
-        print(f"Sugar: {self.sugar_cube}g")
+        #function to check remaining inventory
+        print(f"Water: {self.water_level}ml") # water available
+        print(f"Milk: {self.milk_level}ml") #milk available
+        print(f"Coffee Beans: {self.coffee_beans}g") # coffee beans available
+        print(f"Sugar: {self.sugar_cube}g") # sugar available
 
     def brew_coffee(self, coffee_type):
+        # component that calls the intended coffee making process
         if coffee_type == "espresso":
             self.make_espresso()
         elif coffee_type == "latte":
@@ -59,12 +61,13 @@ class CoffeeMachine:
         if self.water_level >= 100 and self.coffee_beans >= 18:
             self.water_level -= 100
             self.coffee_beans -= 18
-            self.money_earned += 10  # price of cappuccino
+            self.money_earned += 10  # price of americano
             print("Americano is ready!")
         else:
             print("Not enough ingredients")
             
     def addSugar(self, add_sugar):
+        #check whether user wants to add sugar and how much
         if add_sugar == "Y":
             sugar_amount = int(input("Enter amount of sugar you want to add(in grams): "))
             if sugar_amount <= self.sugar_cube:
@@ -76,6 +79,7 @@ class CoffeeMachine:
         return 0
                 
     def confirm_order(self, coffee_type, sugar_amount):
+        # function for order confirmation
         price = 0
         if coffee_type == "espresso":
             price = 10
@@ -90,10 +94,10 @@ class CoffeeMachine:
             
     def restock(self, water, milk, coffee, sugar):
         try:
-            self.water_level += int(water)  
-            self.milk_level += int(milk)
-            self.coffee_beans += int(coffee)
-            self.sugar_cube += int(sugar)
+            self.water_level += int(water)  #amount of water to be added in ml
+            self.milk_level += int(milk) #amount of milk to be added in ml
+            self.coffee_beans += int(coffee) #amount of coffee beans to be added in grams
+            self.sugar_cube += int(sugar) #amount of sugar to be added in grams
             print("Inventory restocked!")
         except ValueError:
             print("Please enter valid numbers for restocking ingredients.")
@@ -113,7 +117,7 @@ def main():
         display_menu()
         choice = input("Choose an option: ")
 
-        if choice == "1":
+        if choice == "1": #Order Coffee
             coffee_type = input("Enter coffee type (espresso/latte/cappuccino/americano): ").lower()
             add_sugar = input("Add sugar(Y for Yes/N for No): ").upper()
             sugar_amount = machine.addSugar(add_sugar)
@@ -122,17 +126,24 @@ def main():
                  machine.brew_coffee(coffee_type)
             else:
                 print("Order canceled.")
-        elif choice == "2":
+                
+        elif choice == "2": #Check Inventory
             machine.check_inventory()
-        elif choice == "3":
+            
+        elif choice == "3": #Restock Ingredients
             water = int(input("Enter water to add (ml): "))
             milk = int(input("Enter milk to add (ml): "))
             coffee = int(input("Enter coffee beans to add (g): "))
             sugar = int(input("Enter sugar to add (g): "))
-            machine.restock(water, milk, coffee, sugar)
-        elif choice == "4":
+            if(water>=0 and milk>=0 and coffee>=0 and sugar>=0):
+                machine.restock(water, milk, coffee, sugar)
+            else:
+                print("Please enter a valid amount")
+                
+        elif choice == "4": #Check Earnings
             print(f"Total earnings: Rs {machine.money_earned}")
-        elif choice == "5":
+            
+        elif choice == "5": #Exit Program
             print("Exiting...")
             break
         else:
