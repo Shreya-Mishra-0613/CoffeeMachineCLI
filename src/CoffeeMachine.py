@@ -53,7 +53,8 @@ class CoffeeMachine:
             print("Cappuccino is ready!")
         else:
             print("Not enough ingredients")
-            
+    
+
     def make_americano(self):
         if self.water_level >= 100 and self.coffee_beans >= 18:
             self.water_level -= 100
@@ -68,8 +69,24 @@ class CoffeeMachine:
             sugar_amount = int(input("Enter amount of sugar you want to add(in grams): "))
             if sugar_amount <= self.sugar_cube:
                 self.sugar_cube -= sugar_amount
+                return sugar_amount
             else:
                 print("Not enough ingredients")
+                return 0
+        return 0
+                
+    def confirm_order(self, coffee_type, sugar_amount):
+        price = 0
+        if coffee_type == "espresso":
+            price = 10
+        elif coffee_type == "latte":
+            price = 20
+        elif coffee_type == "cappuccino":
+            price = 20
+        elif coffee_type == "americano":
+            price = 10
+        confirmation = input(f"Confirm your order:\n{coffee_type} with {sugar_amount}g of sugar\nPrice: Rs {price}\n Enter 'Y' to confirm: ").upper()
+        return confirmation
             
     def restock(self, water, milk, coffee, sugar):
         try:
@@ -88,6 +105,7 @@ def display_menu():
     print("3. Restock Ingredients")
     print("4. Check Earnings")
     print("5. Exit\n")
+    
 def main():
     machine = CoffeeMachine()
     
@@ -98,8 +116,12 @@ def main():
         if choice == "1":
             coffee_type = input("Enter coffee type (espresso/latte/cappuccino/americano): ").lower()
             add_sugar = input("Add sugar(Y for Yes/N for No): ").upper()
-            machine.addSugar(add_sugar)
-            machine.brew_coffee(coffee_type)
+            sugar_amount = machine.addSugar(add_sugar)
+            
+            if machine.confirm_order(coffee_type, sugar_amount) == "Y":
+                 machine.brew_coffee(coffee_type)
+            else:
+                print("Order canceled.")
         elif choice == "2":
             machine.check_inventory()
         elif choice == "3":
@@ -115,5 +137,6 @@ def main():
             break
         else:
             print("Invalid option, please try again.")
-
-
+            
+if __name__ == "__main__":
+    main()
